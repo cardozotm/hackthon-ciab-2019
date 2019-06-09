@@ -89,9 +89,9 @@ object updateIdentity {
                     personalData = personalData,
                     contactData = contactData,
                     financialData =  financialData,
-                    personalDataAuth = false,
-                    contactDataAuth = false,
-                    financialDataAuth = false
+                    personalDataAuth = "false",
+                    contactDataAuth = "false",
+                    financialDataAuth = "false"
             )
 
             // cria o state
