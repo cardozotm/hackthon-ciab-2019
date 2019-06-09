@@ -20,9 +20,10 @@ ion-alert .danger {
 
 :root {
   ion-toolbar{
-  --ion-background-color: var(--orange-shade);
+  --ion-background-color: var(--background-gold);
+  color: white;
   }
-  --ion-background-color: var(--orange-tint);
+  --ion-background-color: var(--background-gold-tint);
 }
 ion-card {
   background: white!important;

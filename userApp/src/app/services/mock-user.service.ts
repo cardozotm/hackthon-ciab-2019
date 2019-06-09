@@ -31,19 +31,31 @@ export class MockUserService {
   createUser() {
     return new Promise(async (resolve, reject) => {
       const personal = {
+        name: 'Amalia Snider',
+        uid: CPF.generate(),
+        picture: 'http://placehold.it/32x32',
+        birthDate: 'xx/xx/xxxx',
+        gender: 'female'
 
       };
       const contact = {
+        email: 'amaliasnider@bulljuice.com',
+        phone: '+1 (857) 516-3299',
+        address: '461 Coleridge Street, Bradenville, Palau, 6263'
 
       };
       const financial = {
-
+        company: 'GINKOGENE',
+        creditLimit: 75133,
+        numberOfDependents: 9,
+        anualIncome: 87478,
+        taxesReturn: 51825
       };
 
       const keys = await this.cryptoSv.generateKeyPair();
       localStorage.setItem('privKey', keys.privKey);
       const data = {
-        uid: CPF.generate(),
+        uid: personal.uid,
         pubkey: this.cryptoSv.parseKeys(keys.pubKey),
         personalData: JSON.stringify(personal),
         contactData: JSON.stringify(contact),
@@ -52,8 +64,9 @@ export class MockUserService {
       console.log(data);
       this.http.post(`${environment.cordaApi}/create-account`, data)
         .subscribe(
-          (res) => {
+          (res: any) => {
             console.log(res);
+            localStorage.setItem('userInfo', JSON.stringify(res.entity.data));
             resolve(res);
           },
           (err) => {
