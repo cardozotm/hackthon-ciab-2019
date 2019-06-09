@@ -1,7 +1,10 @@
 package com.template.webserver
 
 import com.template.flow.createIdentity
+import com.template.flow.createIdentity.CreateIdentityFlow
+import com.template.flows.updateIdentity
 import com.template.model.IdentityRequestModel
+import com.template.model.UpdateRequestModel
 import com.template.schema.IdentitySchemaV1
 import com.template.state.IdentityState
 import net.corda.core.messaging.startTrackedFlow
@@ -59,7 +62,7 @@ class Controller(rpc: NodeRPCConnection) {
 
     @CrossOrigin
     @PostMapping(value = ["/update-account"], produces = arrayOf(MediaType.APPLICATION_JSON), consumes = arrayOf(MediaType.APPLICATION_JSON))
-    fun updateAccount(@RequestBody data: IdentityRequestModel): Response {
+    fun updateAccount(@RequestBody data: UpdateRequestModel): Response {
 
         val indexUid = IdentitySchemaV1.PersistentIdentity::uid.equal(data.uid)
         val criteria = QueryCriteria.VaultCustomQueryCriteria(expression = indexUid)
@@ -71,7 +74,7 @@ class Controller(rpc: NodeRPCConnection) {
 
         return try {
 
-            val signedTx = proxy.startTrackedFlow(createIdentity::CreateIdentityFlow, data.uid, data.pubkey, data.personalData, data.contactData, data.financialData).returnValue.getOrThrow()
+            val signedTx = proxy.startTrackedFlow(updateIdentity::updateIndentityFlow, data.personalData, data.contactData, data.financialData, data.message, data.signature).returnValue.getOrThrow()
 
             Response.status(Response.Status.CREATED).entity( signedTx.tx.outputs.single() ).build()
 
