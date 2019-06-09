@@ -14,9 +14,11 @@ export class AuthorizationsPage implements OnInit {
   user;
   bankList;
   dataList = [
-    { name: 'Dados pessoais', key: 'personalData' },
-    { name: 'Dados financeiros', key: 'financialData' },
-    { name: 'Dados de contato', key: 'contactData' }
+    // tslint:disable-next-line:max-line-length
+    { name: 'Dados pessoais', key: 'personalData', details: `<ul><li>Nome</li><li>CPF/CNPJ</li><li>Data de Nascimento</li><li>Identificação de gênero</li></ul>` },
+    // tslint:disable-next-line:max-line-length
+    { name: 'Dados financeiros', key: 'financialData', details: `<ul><li>Empresa</li><li>Limite de crédito</li><li>Nº de dependentes</li><li>Renda anual</li><li>Declaração de IR</li></ul>` },
+    { name: 'Dados de contato', key: 'contactData', details: `<ul><li>E-mail</li><li>Telefone</li><li>Endereço</li></ul>`}
   ];
   identity;
   constructor(
@@ -49,11 +51,12 @@ export class AuthorizationsPage implements OnInit {
       header: 'Detalhes da autorização',
       message: `
       <p><b>${bank.name}</b> deseja acessar suas informações de:</p>
-      <ul><li>${auth.name}</li><ul>
+      <ul><li>${auth.name} ${this.dataList.find(x => x.name === auth.name).details}</li><ul>
       `,
       buttons: [
         {
           text: 'Autorizar',
+          cssClass: 'affirmative',
           handler: () => {
             this.cordaSv.approveDataRequest(auth).then((res: any) => {
               console.log('Request approved', res);

@@ -1,14 +1,59 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Relatórios de dados</ion-title>
+    <ion-title>Admin Backoffice</ion-title>
     <ion-button class="pr" slot="end" (click)="getAllStates()">
-        <ion-icon name="refresh"></ion-icon>
-      </ion-button>
+      <ion-icon name="refresh"></ion-icon>
+    </ion-button>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-list>
+<ion-content padding>
+  <div text-center>
+    <h2 class="highlight">KeyDATA</h2>
+    <h4>Relatórios de Usuários</h4>
+  </div>
+
+  <ion-card text-center padding>
+    <h1>{{totalUsers | number:'0.0-0'}}</h1>
+      <p>Total de usuários com permissão</p>
+  </ion-card>
+  <ion-card text-center padding>
+    <ion-row>
+      <ion-col>
+          <h1>{{totalUsersPer | number:'0.0-0'}}</h1>
+          <p>Dados pessoais</p>
+        </ion-col>
+      <ion-col>
+          <h1>{{totalUsersFin | number:'0.0-0'}}</h1>
+          <p>Dados financeiros</p>
+        </ion-col>
+      <ion-col>
+          <h1>{{totalUsersCon | number:'0.0-0'}}</h1>
+          <p>Dados de contato</p>
+        </ion-col>
+    </ion-row>
+    <!-- Por usuário -->
+  </ion-card>
+
+  <ion-card text-center padding>
+    <h1>
+      {{averageAge | number:'0.1-1'}} anos
+    </h1>
+    <p>
+      <ion-text>Idade média</ion-text>
+    </p>
+  </ion-card>
+
+  <ion-card text-center padding>
+    <h1>
+      R$ {{averageIncome | number: '0.2-2'}}
+    </h1>
+    <p>
+      Renda anual média
+    </p>
+  </ion-card>
+
+  <!-- <ion-list>
     <ion-item>
       <ion-text>Total de usuários dados pessoais</ion-text>
       <ion-text slot="end">{{totalUsersPer | number:'0.0-0'}}</ion-text>
@@ -25,6 +70,6 @@
       <ion-text>Renda anual média</ion-text>
       <ion-text slot="end">R$ {{averageIncome | number: '0.2-2'}}</ion-text>
     </ion-item>
-  </ion-list>
+  </ion-list> -->
 
 </ion-content>
