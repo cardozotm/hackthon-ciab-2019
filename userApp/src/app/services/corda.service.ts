@@ -36,12 +36,18 @@ export class CordaService {
     return new Promise(async (resolve, reject) => {
       const message = this.cryptoSv.generateNonce();
       const signature = await this.cryptoSv.signWithPrivk(localStorage.getItem('privKey'), message);
+      const identity = JSON.parse(localStorage.getItem('userInfo')).identity;
       const data = {
-        alt: auth,
         message,
-        signature
+        signature,
+        uid: identity.uid,
+        personalDataAuth: identity.personalDataAuth,
+        financialDataAuth: identity.financialDataAuth,
+        contactDataAuth: identity.contactDataAuth,
       };
-      this.http.post(`${environment.cordaApi}/autorization`, data).subscribe(
+      data[auth.key + 'Auth'] = true;
+      console.log(data);
+      this.http.post(`${environment.cordaApi}/autorize`, data).subscribe(
         (res) => {
           console.log(res, 'accepted');
           resolve(res);
@@ -60,7 +66,6 @@ export class CordaService {
       const message = this.cryptoSv.generateNonce();
       const signature = await this.cryptoSv.signWithPrivk(localStorage.getItem('privKey'), message);
       const data = {
-        alt: auth,
         message,
         signature
       };
@@ -74,11 +79,11 @@ export class CordaService {
       const message = this.cryptoSv.generateNonce();
       const signature = await this.cryptoSv.signWithPrivk(localStorage.getItem('privKey'), message);
       const data = {
-        alt: auth,
         message,
-        signature
+        signature,
       };
-      this.http.post(`${environment.cordaApi}/autorization`, data).subscribe(
+      data[auth.key] = false;
+      this.http.post(`${environment.cordaApi}/autorize`, data).subscribe(
         (res) => {
           console.log(res, 'marked for deletion');
           resolve(res);

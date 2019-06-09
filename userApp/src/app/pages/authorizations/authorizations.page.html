@@ -7,7 +7,7 @@
 
 <ion-content padding>
   <div text-center>
-    <h2>qData</h2>
+    <h2>keyData</h2>
     <h4>Soluções em Privacidade</h4>
   </div>
 
@@ -23,7 +23,7 @@
         <ion-item *ngFor="let auth of bank.authListPending">
           <ion-label>{{auth.name}}</ion-label>
           <ion-button slot="end" color="primary" (click)="showDetailsApproval(auth, bank)">
-            <ion-icon name="eye"></ion-icon>
+            Detalhes
           </ion-button>
         </ion-item>
       </ion-item-group>
@@ -42,7 +42,7 @@
         <ion-item *ngFor="let auth of bank.authList">
           <ion-label>{{auth.name}}</ion-label>
           <ion-button slot="end" (click)="showDetailsApproved(auth, bank)">
-            <ion-icon name="eye"></ion-icon>
+              Detalhes
           </ion-button>
         </ion-item>
       </ion-item-group>
