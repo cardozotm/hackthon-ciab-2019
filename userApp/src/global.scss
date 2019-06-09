@@ -13,3 +13,43 @@
 ion-alert .danger {
   color: var(--ion-color-danger)!important;
 }
+
+.pl {
+  padding-left: 20px;
+}
+
+.pr {
+  padding-right: 20px;
+}
+
+.pt {
+  padding-top: 20px;
+}
+
+.mt {
+  margin-top: 20px;
+}
+
+:root {
+  ion-toolbar{
+  --ion-background-color: var(--background-gold);
+  color: white;
+  }
+  --ion-background-color: var(--background-gold-tint);
+}
+ion-card {
+  background: white!important;
+  --ion-background-color: white;
+}
+
+ion-item-divider {
+  font-size: 18px;
+}
+
+.alert {
+  color: var(--ion-color-warning-shade)
+}
+
+.affirmative {
+  color: var(--green-shade)
+}
