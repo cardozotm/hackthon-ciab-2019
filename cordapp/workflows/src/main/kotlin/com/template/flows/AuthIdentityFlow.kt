@@ -25,15 +25,15 @@ import org.bouncycastle.asn1.x500.style.RFC4519Style.uid
 import java.time.Instant
 
 
-object updateIdentity {
+object authIdentity {
 
     @InitiatingFlow
     @StartableByRPC
     @CordaSerializable
-    class updateIndentityFlow(
-            private val personalData: String,
-            private val contactData: String,
-            private val financialData: String,
+    class authIndentityFlow(
+            private val personalDataAuth: Boolean,
+            private val contactDataAuth: Boolean,
+            private val financialDataAuth: Boolean,
             private val message: String,
             private val signature: String
     ) : BaseFlow() {
@@ -79,13 +79,6 @@ object updateIdentity {
             val oldIdentityState = oldIdentityStateAndRef.state.data
 
 
-//            // criando uma nova conta de débito
-//            val newIdentityState = oldIdentityState.identity.copy(
-//                    personalData = personalData,
-//                    contactData = contactData,
-//                    financialData = financialData
-//            )
-
             // define uma conta
             val account = IdentityModel(
                     orgTo = ourIdentity,
@@ -93,12 +86,12 @@ object updateIdentity {
                     createTime = Instant.now(),
                     uid = oldIdentityState.identity.uid,
                     pubkey = oldIdentityState.identity.pubkey,
-                    personalData = personalData,
-                    contactData = contactData,
-                    financialData =  financialData,
-                    personalDataAuth = false,
-                    contactDataAuth = false,
-                    financialDataAuth = false
+                    personalData = oldIdentityState.identity.personalData,
+                    contactData = oldIdentityState.identity.contactData,
+                    financialData =  oldIdentityState.identity.financialData,
+                    personalDataAuth = personalDataAuth,
+                    contactDataAuth = contactDataAuth,
+                    financialDataAuth = financialDataAuth
             )
 
             // cria o state

@@ -79,13 +79,6 @@ object updateIdentity {
             val oldIdentityState = oldIdentityStateAndRef.state.data
 
 
-//            // criando uma nova conta de débito
-//            val newIdentityState = oldIdentityState.identity.copy(
-//                    personalData = personalData,
-//                    contactData = contactData,
-//                    financialData = financialData
-//            )
-
             // define uma conta
             val account = IdentityModel(
                     orgTo = ourIdentity,
@@ -95,7 +88,10 @@ object updateIdentity {
                     pubkey = oldIdentityState.identity.pubkey,
                     personalData = personalData,
                     contactData = contactData,
-                    financialData =  financialData
+                    financialData =  financialData,
+                    personalDataAuth = false,
+                    contactDataAuth = false,
+                    financialDataAuth = false
             )
 
             // cria o state

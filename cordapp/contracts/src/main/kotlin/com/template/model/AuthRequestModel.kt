@@ -1,9 +1,10 @@
 package com.template.model
 
-data class IdentityRequestModel (
+data class AuthRequestModel (
         val uid : String,
-        val pubkey : String,
-        val personalData: String,
-        val contactData: String,
-        val financialData: String
+        val message : String,
+        val signature : String,
+        val personalDataAuth: Boolean,
+        val contactDataAuth: Boolean,
+        val financialDataAuth: Boolean
 )
