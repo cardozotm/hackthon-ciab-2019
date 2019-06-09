@@ -63,9 +63,9 @@ object createIdentity {
                     personalData = personalData,
                     contactData = contactData,
                     financialData =  financialData,
-                    personalDataAuth = false,
-                    financialDataAuth = false,
-                    contactDataAuth = false
+                    personalDataAuth = "false",
+                    financialDataAuth = "false",
+                    contactDataAuth = "false"
             )
 
             // cria o state
