@@ -7,6 +7,7 @@ import java.time.Instant
 @CordaSerializable
 data class AuthModel(
          val entity : Party,
+         val uid : String,
          val message: String,
          val signature: String
 )

@@ -18,14 +18,14 @@ object AuthSchemaV1 : MappedSchema(
     version = 1,
     mappedTypes = listOf(PersistentAuth::class.java)) {
     @Entity
-    @Table(name = "auth_states", indexes = [Index(name = "message_idx", columnList="message")])
+    @Table(name = "auth_states", indexes = [Index(name = "uid_idx", columnList="uid")])
     class PersistentAuth(
 
-        @Column(name = "message")
-        var message: String
+        @Column(name = "uid")
+        var uid: String
 
     ) : PersistentState() {
         // Default constructor required by hibernate.
-        constructor(): this(message = "")
+        constructor(): this(uid = "")
     }
 }
