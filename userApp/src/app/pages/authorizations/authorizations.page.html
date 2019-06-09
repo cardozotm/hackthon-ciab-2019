@@ -1,15 +1,19 @@
 <ion-header>
   <ion-toolbar>
     <ion-icon slot="start" name="person" class="pl"></ion-icon>
-    <ion-title>Bem vindo {{user.personalData.name}}</ion-title>
+    <ion-title>Bem vindo(a) {{user.personalData.name}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
+  <div text-center>
+    <h2>qData</h2>
+    <h4>Soluções em Privacidade</h4>
+  </div>
 
   <ion-card padding>
     <ion-card-title>
-      <ion-icon name="alert"></ion-icon> Autorizações pendentes
+      <ion-icon name="alert" class="alert"></ion-icon> Autorizações pendentes
     </ion-card-title>
     <ion-list>
       <ion-item-group *ngFor="let bank of bankList">
@@ -26,9 +30,9 @@
     </ion-list>
   </ion-card>
 
-  <ion-card padding>
+  <ion-card padding class="mt">
     <ion-card-title>
-      <ion-icon name="checkmark-circle"></ion-icon> Autorizações ativas
+      <ion-icon name="checkmark-circle" class="affirmative"></ion-icon> Autorizações ativas
     </ion-card-title>
     <ion-list>
       <ion-item-group *ngFor="let bank of bankList">

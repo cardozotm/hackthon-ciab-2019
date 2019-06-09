@@ -7,7 +7,7 @@ export class CordaService {
 
   bankList = [
     {
-      name: 'Banco Inter',
+      name: 'Banco Euro',
       authListPending: [
         { name: 'Dados pessoais', key: 'personalData'},
         { name: 'Dados financeiros', key: 'financialData'},

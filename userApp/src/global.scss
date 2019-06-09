@@ -18,6 +18,18 @@ ion-alert .danger {
   padding-left: 20px;
 }
 
+.pr {
+  padding-right: 20px;
+}
+
+.pt {
+  padding-top: 20px;
+}
+
+.mt {
+  margin-top: 20px;
+}
+
 :root {
   ion-toolbar{
   --ion-background-color: var(--background-gold);
@@ -32,4 +44,12 @@ ion-card {
 
 ion-item-divider {
   font-size: 18px;
+}
+
+.alert {
+  color: var(--ion-color-warning-shade)
+}
+
+.affirmative {
+  color: var(--green-shade)
 }
