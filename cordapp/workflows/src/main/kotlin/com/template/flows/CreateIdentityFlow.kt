@@ -11,9 +11,6 @@ import com.template.model.IdentityModel
 import com.template.state.IdentityState
 import java.time.Instant
 
-//import okhttp3.OkHttpClient
-//import okhttp3.Request
-
 object createIdentity {
 
     @InitiatingFlow
@@ -55,21 +52,10 @@ object createIdentity {
             // define progresso
             progressTracker.currentStep = INITIALISING
 
-//          testar se a DID informada está correta
-//            val validateUrl = "http://localhost:10050/api/verifyDid/did:sov:23h23kskdl" // ????
-//            val httpRequest = Request.Builder().url(validateUrl).build()
-//            val httpResponse = OkHttpClient().newCall(httpRequest).execute()
-//            if (!httpResponse.isSuccessful) { throw Exception("DID Inválida") }
-//
-//            val accountList = getAccountStateByDocument(this.uid)
-//            if (accountList.isNotEmpty()) {
-//                throw Exception("Conta existente")
-//            }
-
 
             // define uma conta
             val account = IdentityModel(
-                    entity = ourIdentity,
+                    orgTo = ourIdentity,
                     entityName = ourIdentity.name.organisation,
                     createTime = Instant.now(),
                     uid = uid,

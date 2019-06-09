@@ -11,21 +11,21 @@ import javax.persistence.Table
  * The family of schemas for IdentityState.
  */
 
-object IdentitySchema
+object AuthSchema
 
-object IdentitySchemaV1 : MappedSchema(
-    schemaFamily = IdentitySchema.javaClass,
+object AuthSchemaV1 : MappedSchema(
+    schemaFamily = AuthSchema.javaClass,
     version = 1,
-    mappedTypes = listOf(PersistentIdentity::class.java)) {
+    mappedTypes = listOf(PersistentAuth::class.java)) {
     @Entity
-    @Table(name = "identity_states", indexes = [Index(name = "uid_idx", columnList="uid")])
-    class PersistentIdentity(
+    @Table(name = "auth_states", indexes = [Index(name = "message_idx", columnList="message")])
+    class PersistentAuth(
 
-        @Column(name = "uid")
-        var uid: String
+        @Column(name = "message")
+        var message: String
 
     ) : PersistentState() {
         // Default constructor required by hibernate.
-        constructor(): this(uid = "")
+        constructor(): this(message = "")
     }
 }

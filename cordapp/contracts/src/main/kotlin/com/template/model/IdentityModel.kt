@@ -6,7 +6,7 @@ import java.time.Instant
 
 @CordaSerializable
 data class IdentityModel(
-    val entity : Party,
+    val orgTo : Party,
     val entityName : String,
     val createTime : Instant,
     val uid : String,
