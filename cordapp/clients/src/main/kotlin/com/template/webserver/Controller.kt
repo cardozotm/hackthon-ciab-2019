@@ -42,7 +42,7 @@ class Controller(rpc: NodeRPCConnection) {
     @CrossOrigin
     @GetMapping(value = "/all", produces = arrayOf(MediaType.APPLICATION_JSON))
     private fun debits(): Response {
-        val criteria = QueryCriteria.VaultQueryCriteria(Vault.StateStatus.ALL)
+        val criteria = QueryCriteria.VaultQueryCriteria(Vault.StateStatus.UNCONSUMED)
         val result = proxy.vaultQueryBy<IdentityState>(criteria = criteria).states
         return Response.status(Response.Status.CREATED).entity(result).build()
     }
