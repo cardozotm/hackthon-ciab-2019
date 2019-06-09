@@ -118,7 +118,7 @@ class Controller(rpc: NodeRPCConnection) {
         if (identity.isNotEmpty()){
             return try {
 
-                val signedTx = proxy.startTrackedFlow(authIdentity::authIndentityFlow, data.personalDataAuth, data.contactDataAuth, data.financialDataAuth, data.message, data.signature).returnValue.getOrThrow()
+                val signedTx = proxy.startTrackedFlow(authIdentity::authIndentityFlow, data.uid, data.personalDataAuth, data.contactDataAuth, data.financialDataAuth, data.message, data.signature).returnValue.getOrThrow()
 
                 Response.status(Response.Status.CREATED).entity( signedTx.tx.outputs.single() ).build()
 
