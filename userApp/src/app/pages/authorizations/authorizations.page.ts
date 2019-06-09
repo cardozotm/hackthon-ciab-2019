@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
+import { CordaService } from 'src/app/services/corda.service';
 
 @Component({
   selector: 'app-authorizations',
@@ -9,27 +10,20 @@ import { AlertController } from '@ionic/angular';
 export class AuthorizationsPage implements OnInit {
 
   user = {
-    name: 'Fulano da Silva.'
+    name: 'Fulano da Silva'
   };
-  bankList = [
-    {
-      name: 'Banco Inter',
-      authListPending: [
-        'Dados pessoais',
-        'Gastos com telefone',
-        'Dados de endereço'
-      ],
-      authList: [
-        'Gastos com telefone',
-        'Dados de endereço'
-      ]
-    }
-  ];
+  bankList;
   constructor(
     private alertCtrl: AlertController,
+    private cordaSv: CordaService,
   ) { }
 
   ngOnInit() {
+    this.getBanks();
+  }
+
+  getBanks() {
+    this.cordaSv.getBanks().then(res => this.bankList = res);
   }
 
   async showDetailsApproval(auth) {
@@ -41,13 +35,19 @@ export class AuthorizationsPage implements OnInit {
         {
           text: 'Autorizar',
           handler: () => {
-            console.log(auth, 'accepted');
+            this.cordaSv.approveDataRequest(auth).then(() => {
+              console.log('Request approved');
+              this.getBanks();
+            });
           }
         },
         {
           text: 'Rejeitar',
           handler: () => {
-            console.log(auth, 'rejected');
+            this.cordaSv.rejectDataRequest(auth).then(() => {
+              console.log('Request rejected');
+              this.getBanks();
+            });
           },
           cssClass: 'danger',
           role: 'cancel'
@@ -67,7 +67,10 @@ export class AuthorizationsPage implements OnInit {
           text: 'Remover',
           cssClass: 'danger',
           handler: () => {
-            console.log(auth, 'marked for deletion');
+            this.cordaSv.deleteDataAuth(auth).then(() => {
+              console.log('Authorization deleted');
+              this.getBanks();
+            });
           }
         }
       ]
