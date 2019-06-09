@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { CordaService } from 'src/app/services/corda.service';
+import { MockUserService } from 'src/app/services/mock-user.service';
 
 @Component({
   selector: 'app-authorizations',
@@ -16,10 +17,12 @@ export class AuthorizationsPage implements OnInit {
   constructor(
     private alertCtrl: AlertController,
     private cordaSv: CordaService,
+    private mock: MockUserService,
   ) { }
 
   ngOnInit() {
     this.getBanks();
+    this.mock.createUser();
   }
 
   getBanks() {

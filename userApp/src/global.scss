@@ -13,3 +13,18 @@
 ion-alert .danger {
   color: var(--ion-color-danger)!important;
 }
+
+.pl {
+  padding-left: 20px;
+}
+
+:root {
+  ion-toolbar{
+  --ion-background-color: var(--orange-shade);
+  }
+  --ion-background-color: var(--orange-tint);
+}
+ion-card {
+  background: white!important;
+  --ion-background-color: white;
+}

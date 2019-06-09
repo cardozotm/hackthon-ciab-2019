@@ -25,7 +25,6 @@ class IdentityContract : Contract {
         }
 
     }
-            "Apenas uma conta deve ser criada" using (tx.outputs.size == 1)
 
     // validação para criação de uma nova conta
     private fun verifyCreateId(tx: LedgerTransaction){

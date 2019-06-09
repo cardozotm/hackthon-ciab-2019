@@ -1,14 +1,14 @@
 <ion-header>
   <ion-toolbar>
-    <ion-icon slot="start" name="person"></ion-icon>
+    <ion-icon slot="start" name="person" class="pl"></ion-icon>
     <ion-title>Bem vindo {{user.name}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
-  <ion-card>
-    <ion-card-title>Autorizações pendentes</ion-card-title>
+  <ion-card padding>
+    <ion-card-title><ion-icon name="alert"></ion-icon> Autorizações pendentes</ion-card-title>
     <ion-list>
       <ion-item-group *ngFor="let bank of bankList">
         <ion-item-divider>
@@ -16,7 +16,7 @@
         </ion-item-divider>
         <ion-item *ngFor="let auth of bank.authListPending">
           <ion-label>{{auth}}</ion-label>
-          <ion-button slot="end" (click)="showDetailsApproval(auth)">
+          <ion-button slot="end" color="primary" (click)="showDetailsApproval(auth)">
             <ion-icon name="eye"></ion-icon>Detalhes
           </ion-button>
         </ion-item>
@@ -24,8 +24,8 @@
     </ion-list>
   </ion-card>
 
-  <ion-card>
-    <ion-card-title>Autorizações ativas</ion-card-title>
+  <ion-card padding>
+    <ion-card-title><ion-icon name="checkmark-circle"></ion-icon> Autorizações ativas</ion-card-title>
     <ion-list>
       <ion-item-group *ngFor="let bank of bankList">
         <ion-item-divider>

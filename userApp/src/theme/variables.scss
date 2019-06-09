@@ -3,8 +3,19 @@
 
 /** Ionic CSS Variables **/
 :root {
+
+  --orange-shade: #E26F1E;
+  --orange: #E99356;
+  --orange-tint: #EFB891;
+  --green-shade: #8BC83C;
+  --green: #A8D56E;
+  --green-tint: #C4E39D;
+  --gold-shade: ;
+  --gold: ;
+  --gold-tint: ;
+
   /** primary **/
-  --ion-color-primary: #3880ff;
+  --ion-color-primary: #8BC83C;
   --ion-color-primary-rgb: 56, 128, 255;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
@@ -74,4 +85,10 @@
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
+
+  --background-gold-shade: 	#a57110;
+  --background-gold: #e6b859;
+  --background-gold-tint: #faf1de;
+  --yellow: #fcd94d;
+  --pink: #ffa1a1;
 }
