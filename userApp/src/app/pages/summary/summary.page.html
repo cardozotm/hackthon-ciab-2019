@@ -8,6 +8,10 @@
 
   <ion-list>
     <ion-item>
+      <ion-text>Total de usuários considerados</ion-text>
+      <ion-text slot="end">{{totalUsers | number:'0.0-0'}}</ion-text>
+    </ion-item>
+    <ion-item>
       <ion-text>Idade média dos usuários</ion-text>
       <ion-text slot="end">{{averageAge | number:'0.1-1'}} anos</ion-text>
     </ion-item>
