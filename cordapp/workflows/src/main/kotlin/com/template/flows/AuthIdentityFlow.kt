@@ -101,7 +101,7 @@ object authIdentity {
             val accountState = IdentityState(account)
 
             // criando o novo state auth
-            val auth = AuthModel(entity = ourIdentity, message = message, signature = signature)
+            val auth = AuthModel(entity = ourIdentity, uid = uid, message = message, signature = signature)
             val authState = AuthState(auth)
 
 
