@@ -23,6 +23,7 @@ export class SummaryPage implements OnInit {
   getAllStates() {
     this.cordaSv.getAll()
     .then((states: Array<any>) => {
+      console.log(states);
       let sumAge = 0;
       let sumIncome = 0;
       states.forEach(el => {
