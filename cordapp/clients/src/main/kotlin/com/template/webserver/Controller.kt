@@ -7,6 +7,7 @@ import com.template.flows.updateIdentity
 import com.template.model.AuthRequestModel
 import com.template.model.IdentityRequestModel
 import com.template.model.UpdateRequestModel
+import com.template.schema.AuthSchemaV1
 import com.template.schema.IdentitySchemaV1
 import com.template.state.IdentityState
 import net.corda.core.messaging.startTrackedFlow
@@ -41,20 +42,47 @@ class Controller(rpc: NodeRPCConnection) {
 
     @CrossOrigin
     @GetMapping(value = "/all", produces = arrayOf(MediaType.APPLICATION_JSON))
-    private fun debits(): Response {
+    private fun all(): Response {
         val criteria = QueryCriteria.VaultQueryCriteria(Vault.StateStatus.UNCONSUMED)
         val result = proxy.vaultQueryBy<IdentityState>(criteria = criteria).states
         return Response.status(Response.Status.CREATED).entity(result).build()
     }
 
+    @CrossOrigin
+    @GetMapping(value = "/user/{uid}", produces = arrayOf(MediaType.APPLICATION_JSON))
+    private fun getUserById(@PathVariable uid: String) : Response {
 
-//    @CrossOrigin
-//    @GetMapping(value = "/only", produces = arrayOf(MediaType.APPLICATION_JSON))
-//    private fun debits(): Response {
-//        val criteria = QueryCriteria.VaultQueryCriteria(Vault.StateStatus.ALL)
-//        val result = proxy.vaultQueryBy<IdentityState>(criteria = criteria).states
-//        return Response.status(Response.Status.CREATED).entity(result).build()
-//    }
+        val indexUid = IdentitySchemaV1.PersistentIdentity::uid.equal(uid)
+        val criteria = QueryCriteria.VaultCustomQueryCriteria(expression = indexUid)
+        val states = proxy.vaultQueryBy<IdentityState>(criteria).states
+
+        return if (states.isNotEmpty()){
+
+            Response.status(Response.Status.CREATED).entity(states).build()
+
+        } else {
+
+            Response.status(Response.Status.NOT_FOUND).entity("Uid not found").build()
+        }
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/auth/{uid}", produces = arrayOf(MediaType.APPLICATION_JSON))
+    private fun getAuthById(@PathVariable uid: String) : Response {
+
+        val indexUid = AuthSchemaV1.PersistentAuth::uid.equal(uid)
+        val criteria = QueryCriteria.VaultCustomQueryCriteria(expression = indexUid)
+        val states = proxy.vaultQueryBy<IdentityState>(criteria).states
+
+        return if (states.isNotEmpty()){
+
+            Response.status(Response.Status.CREATED).entity(states).build()
+
+        } else {
+
+            Response.status(Response.Status.NOT_FOUND).entity("Uid not found").build()
+        }
+    }
 
     @CrossOrigin
     @PostMapping(value = ["/create-account"], produces = arrayOf(MediaType.APPLICATION_JSON), consumes = arrayOf(MediaType.APPLICATION_JSON))

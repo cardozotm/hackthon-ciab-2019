@@ -36,7 +36,7 @@ function loadAccounts(){
     $('#accountTable').find('tr').remove()
     $('#accountTable').append('<tr><td>ID</td><td>Nome</td><td>Saldo</td></tr>');
 
-    var endpoint = '/api/account/users';
+    var endpoint = 'http://localhost:10050/all';
 
     $.get(endpoint, function(data, status){
 
