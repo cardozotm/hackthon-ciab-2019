@@ -27,7 +27,6 @@ export class AuthorizationsPage implements OnInit {
 
   ngOnInit() {
     this.getBanks();
-    this.mock.createUser();
     this.getUser();
   }
 
