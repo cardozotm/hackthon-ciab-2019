@@ -20,12 +20,14 @@
         <ion-item-divider>
           <ion-label>{{bank.name}}</ion-label>
         </ion-item-divider>
-        <ion-item *ngFor="let auth of bank.authListPending">
-          <ion-label>{{auth.name}}</ion-label>
-          <ion-button slot="end" color="primary" (click)="showDetailsApproval(auth, bank)">
-            Detalhes
-          </ion-button>
-        </ion-item>
+        <div *ngFor="let data of dataList">
+          <ion-item *ngIf="identity[data.key+'Auth']=='false'">
+            <ion-label>{{data.name}}</ion-label>
+            <ion-button slot="end" color="primary" (click)="showDetailsApproval(data, bank)">
+              Detalhes
+            </ion-button>
+          </ion-item>
+        </div>
       </ion-item-group>
     </ion-list>
   </ion-card>
@@ -39,12 +41,14 @@
         <ion-item-divider>
           <ion-label>{{bank.name}}</ion-label>
         </ion-item-divider>
-        <ion-item *ngFor="let auth of bank.authList">
-          <ion-label>{{auth.name}}</ion-label>
-          <ion-button slot="end" (click)="showDetailsApproved(auth, bank)">
-              Detalhes
-          </ion-button>
-        </ion-item>
+        <div *ngFor="let data of dataList">
+            <ion-item *ngIf="identity[data.key+'Auth']=='true'">
+              <ion-label>{{data.name}}</ion-label>
+              <ion-button slot="end" color="primary" (click)="showDetailsApproved(data, bank)">
+                Detalhes
+              </ion-button>
+            </ion-item>
+          </div>
       </ion-item-group>
     </ion-list>
   </ion-card>

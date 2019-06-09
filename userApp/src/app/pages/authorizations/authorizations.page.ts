@@ -13,6 +13,12 @@ export class AuthorizationsPage implements OnInit {
 
   user;
   bankList;
+  dataList = [
+    { name: 'Dados pessoais', key: 'personalData' },
+    { name: 'Dados financeiros', key: 'financialData' },
+    { name: 'Dados de contato', key: 'contactData' }
+  ];
+  identity;
   constructor(
     private alertCtrl: AlertController,
     private cordaSv: CordaService,
@@ -26,11 +32,11 @@ export class AuthorizationsPage implements OnInit {
   }
 
   getUser() {
-    const identity = JSON.parse(localStorage.getItem('userInfo')).identity;
+    this.identity = JSON.parse(localStorage.getItem('userInfo')).identity;
     this.user = {
-      personalData: JSON.parse(identity.personalData),
-      contactData: JSON.parse(identity.contactData),
-      financialData: JSON.parse(identity.financialData)
+      personalData: JSON.parse(this.identity.personalData),
+      contactData: JSON.parse(this.identity.contactData),
+      financialData: JSON.parse(this.identity.financialData)
     };
   }
 
@@ -50,20 +56,22 @@ export class AuthorizationsPage implements OnInit {
         {
           text: 'Autorizar',
           handler: () => {
-            this.cordaSv.approveDataRequest(auth).then(() => {
-              console.log('Request approved');
-              this.getBanks();
+            this.cordaSv.approveDataRequest(auth).then((res: any) => {
+              console.log('Request approved', res);
+              // this.getBanks();
+              localStorage.setItem('userInfo', JSON.stringify(res.entity.data));
+              this.getUser();
             });
           }
         },
         {
-          text: 'Rejeitar',
-          handler: () => {
-            this.cordaSv.rejectDataRequest(auth).then(() => {
-              console.log('Request rejected');
-              this.getBanks();
-            });
-          },
+          text: 'Voltar',
+          // handler: () => {
+          //   this.cordaSv.rejectDataRequest(auth).then(() => {
+          //     console.log('Request rejected');
+          //     // this.getBanks();
+          //   });
+          // },
           cssClass: 'danger',
           role: 'cancel'
         }
@@ -86,9 +94,11 @@ export class AuthorizationsPage implements OnInit {
           text: 'Remover',
           cssClass: 'danger',
           handler: () => {
-            this.cordaSv.deleteDataAuth(auth).then(() => {
+            this.cordaSv.deleteDataAuth(auth).then((res: any) => {
               console.log('Authorization deleted');
-              this.getBanks();
+              // this.getBanks();
+              localStorage.setItem('userInfo', JSON.stringify(res.entity.data));
+              this.getUser();
             });
           }
         }
