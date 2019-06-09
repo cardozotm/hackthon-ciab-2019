@@ -1,23 +1,25 @@
 <ion-header>
   <ion-toolbar>
     <ion-icon slot="start" name="person" class="pl"></ion-icon>
-    <ion-title>Bem vindo {{user.name}}</ion-title>
+    <ion-title>Bem vindo {{user.personalData.name}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content padding>
 
   <ion-card padding>
-    <ion-card-title><ion-icon name="alert"></ion-icon> Autorizações pendentes</ion-card-title>
+    <ion-card-title>
+      <ion-icon name="alert"></ion-icon> Autorizações pendentes
+    </ion-card-title>
     <ion-list>
       <ion-item-group *ngFor="let bank of bankList">
         <ion-item-divider>
           <ion-label>{{bank.name}}</ion-label>
         </ion-item-divider>
         <ion-item *ngFor="let auth of bank.authListPending">
-          <ion-label>{{auth}}</ion-label>
-          <ion-button slot="end" color="primary" (click)="showDetailsApproval(auth)">
-            <ion-icon name="eye"></ion-icon>Detalhes
+          <ion-label>{{auth.name}}</ion-label>
+          <ion-button slot="end" color="primary" (click)="showDetailsApproval(auth, bank)">
+            <ion-icon name="eye"></ion-icon>
           </ion-button>
         </ion-item>
       </ion-item-group>
@@ -25,16 +27,18 @@
   </ion-card>
 
   <ion-card padding>
-    <ion-card-title><ion-icon name="checkmark-circle"></ion-icon> Autorizações ativas</ion-card-title>
+    <ion-card-title>
+      <ion-icon name="checkmark-circle"></ion-icon> Autorizações ativas
+    </ion-card-title>
     <ion-list>
       <ion-item-group *ngFor="let bank of bankList">
         <ion-item-divider>
           <ion-label>{{bank.name}}</ion-label>
         </ion-item-divider>
         <ion-item *ngFor="let auth of bank.authList">
-          <ion-label>{{auth}}</ion-label>
-          <ion-button slot="end" (click)="showDetailsApproved(auth)">
-            <ion-icon name="eye"></ion-icon>Detalhes
+          <ion-label>{{auth.name}}</ion-label>
+          <ion-button slot="end" (click)="showDetailsApproved(auth, bank)">
+            <ion-icon name="eye"></ion-icon>
           </ion-button>
         </ion-item>
       </ion-item-group>

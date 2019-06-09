@@ -9,13 +9,11 @@ export class CordaService {
     {
       name: 'Banco Inter',
       authListPending: [
-        'Dados pessoais',
-        'Gastos com telefone',
-        'Dados de endereço'
+        { name: 'Dados pessoais', key: 'personalData'},
+        { name: 'Dados financeiros', key: 'financialData'},
       ],
       authList: [
-        'Gastos com telefone',
-        'Dados de endereço'
+        { name: 'Dados de contato', key: 'contactData'}
       ]
     }
   ];

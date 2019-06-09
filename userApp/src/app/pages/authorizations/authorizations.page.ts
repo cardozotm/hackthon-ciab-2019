@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { CordaService } from 'src/app/services/corda.service';
 import { MockUserService } from 'src/app/services/mock-user.service';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-authorizations',
@@ -10,9 +11,7 @@ import { MockUserService } from 'src/app/services/mock-user.service';
 })
 export class AuthorizationsPage implements OnInit {
 
-  user = {
-    name: 'Fulano da Silva'
-  };
+  user;
   bankList;
   constructor(
     private alertCtrl: AlertController,
@@ -23,17 +22,30 @@ export class AuthorizationsPage implements OnInit {
   ngOnInit() {
     this.getBanks();
     this.mock.createUser();
+    this.getUser();
+  }
+
+  getUser() {
+    const identity = JSON.parse(localStorage.getItem('userInfo')).identity;
+    this.user = {
+      personalData: JSON.parse(identity.personalData),
+      contactData: JSON.parse(identity.contactData),
+      financialData: JSON.parse(identity.financialData)
+    };
   }
 
   getBanks() {
     this.cordaSv.getBanks().then(res => this.bankList = res);
   }
 
-  async showDetailsApproval(auth) {
+  async showDetailsApproval(auth, bank) {
     console.log(auth);
     const alert = await this.alertCtrl.create({
       header: 'Detalhes da autorização',
-      message: `${auth}`,
+      message: `
+      <p><b>${bank.name}</b> deseja acessar suas informações de:</p>
+      <ul><li>${auth.name}</li><ul>
+      `,
       buttons: [
         {
           text: 'Autorizar',
@@ -60,12 +72,16 @@ export class AuthorizationsPage implements OnInit {
     await alert.present();
   }
 
-  async showDetailsApproved(auth) {
+  async showDetailsApproved(auth, bank) {
     console.log(auth);
     const alert = await this.alertCtrl.create({
       header: 'Detalhes da autorização',
-      message: `${auth}`,
-      buttons: ['Voltar',
+      message: `
+      <p><b>${bank.name}</b> possui acesso a suas informações de:</p>
+      <ul><li>${auth.name}</li></ul>
+      `,
+      buttons: [
+        'Voltar',
         {
           text: 'Remover',
           cssClass: 'danger',

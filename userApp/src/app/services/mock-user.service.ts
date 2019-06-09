@@ -34,15 +34,13 @@ export class MockUserService {
         name: 'Amalia Snider',
         uid: CPF.generate(),
         picture: 'http://placehold.it/32x32',
-        birthDate: 'xx/xx/xxxx',
+        birthDate: '29/02/1986',
         gender: 'female'
-
       };
       const contact = {
         email: 'amaliasnider@bulljuice.com',
         phone: '+1 (857) 516-3299',
         address: '461 Coleridge Street, Bradenville, Palau, 6263'
-
       };
       const financial = {
         company: 'GINKOGENE',
