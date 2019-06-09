@@ -14,14 +14,16 @@ import java.time.Instant
 //import okhttp3.OkHttpClient
 //import okhttp3.Request
 
-object CreateAccount {
+object createIdentity {
 
     @InitiatingFlow
     @StartableByRPC
     class CreateIdentityFlow(
             val uid : String,
-            val name: String,
-            val did : String
+            val pubkey : String,
+            val personalData: String,
+            val contactData: String,
+            val financialData: String
     ) : BaseFlow() {
 
         companion object {
@@ -70,9 +72,12 @@ object CreateAccount {
                     entity = ourIdentity,
                     entityName = ourIdentity.name.organisation,
                     createTime = Instant.now(),
-                    name = name,
                     uid = uid,
-                    did = did)
+                    pubkey = pubkey,
+                    personalData = personalData,
+                    contactData = contactData,
+                    financialData =  financialData
+            )
 
             // cria o state
             val accountState = IdentityState(account)

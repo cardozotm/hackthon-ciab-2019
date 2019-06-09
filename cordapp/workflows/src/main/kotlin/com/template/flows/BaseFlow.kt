@@ -11,10 +11,8 @@ import net.corda.core.node.services.queryBy
 import net.corda.core.node.services.vault.Builder.equal
 import net.corda.core.node.services.vault.QueryCriteria
 import net.corda.core.transactions.SignedTransaction
-import com.template.schema.AccountSchemaV1
-import com.template.schema.TransferSchemaV1
-import com.template.state.AccountState
-import com.template.state.TransferState
+import com.template.schema.IdentitySchemaV1
+import com.template.state.IdentityState
 
 import java.io.File
 import java.util.*
@@ -23,33 +21,24 @@ abstract class BaseFlow : FlowLogic<SignedTransaction>() {
 
     val notary get() = serviceHub.networkMapCache.notaryIdentities.firstOrNull() ?: throw FlowException("Notary not found")
 
-    fun getAccountStateById(id : String) : List<StateAndRef<AccountState>> {
+    fun getIdentityStateById(id : String) : List<StateAndRef<IdentityState>> {
 
         val uuid = UUID.fromString(id)
 
         val query = QueryCriteria.LinearStateQueryCriteria( uuid = listOf(uuid) )
 
-        return serviceHub.vaultService.queryBy<AccountState>(query).states
+        return serviceHub.vaultService.queryBy<IdentityState>(query).states
 
     }
 
-    fun getAccountStateByDocument(document : String) : List<StateAndRef<AccountState>> {
+    fun getIdentityStateByDocument(document : String) : List<StateAndRef<IdentityState>> {
 
-        val indexDocument = AccountSchemaV1.PersistentAccount::uid.equal(document)
+        val indexDocument = IdentitySchemaV1.PersistentIdentity::uid.equal(document)
         val criteria = QueryCriteria.VaultCustomQueryCriteria(expression = indexDocument)
 
-        return serviceHub.vaultService.queryBy<AccountState>(criteria).states
+        return serviceHub.vaultService.queryBy<IdentityState>(criteria).states
     }
 
-    fun getTransferStateById(id : String) : List<StateAndRef<TransferState>> {
-
-        val uuid = UUID.fromString(id)
-
-        val query = QueryCriteria.LinearStateQueryCriteria( uuid = listOf(uuid) )
-
-        return serviceHub.vaultService.queryBy<TransferState>(query).states
-
-    }
 
 
     fun getSysParty() : Party {
