@@ -1,0 +1,344 @@
+<!DOCTYPE>
+<html>
+<head>
+	<title>Grafico</title>
+
+	<script src="js/jquery-3.3.1.min.js"></script>
+
+    <script src="js/go-debug.js"></script>
+
+    <style>
+    	.input-style {
+    		float: left;
+    		padding: 10px;
+    		padding-right: 40px;
+    	}
+	</style>
+
+</head>
+<body style="padding: 0px; margin: 0px;">
+
+	<div style="height: 50px; border: solid 1px; padding: 10px;">
+		<div class="input-style">
+		    TX: <input text id="txid" value="447AAB21F7490F8EE1663E78067DDF19F9D21DB32EA9BF94A23DD7009E052CDB" size="75"> 
+		    <input type="button" value="Visualizar" onclick="loadGraph('tx')">
+		</div>
+		<div class="input-style">
+		    Account: <input text id="accountid" value="01a348b5-2704-495b-b02f-ee72aab41a66" size="40">
+		    <input type="button" value="Visualizar" onclick="loadGraph('account')">
+		</div>
+		<div class="input-style">
+			Documento: <input text id="document" value="123.456.789-00" size="15">
+			<input type="button" value="Visualizar" onclick="loadGraph('document')">
+		</div>
+	</div>
+
+<div id="area"></div>
+
+ <script>
+
+ 	// elementos do gráfico
+	var elements = []
+	// ligação entre os elementos
+	var links = []
+	// resposta da api com o status de cada state (CONSUMED OU UNCONSUMED)
+	var responseStatus = null;
+
+	// posição das caixinhas
+	var posX = 1000;
+	var posY = [];
+
+	var diagram = null;
+
+	var $go = go.GraphObject.make;
+
+	// funcao chamada para montar o grafico
+	function loadGraph(type){
+
+		createGraph();
+
+		// obtém os valores dos campos
+		var txid = $('#txid').val();
+		var accountid = $('#accountid').val();
+		var acctDocument = $('#document').val();
+
+		// monta o endpoint
+	    //var endpoint = 'https://corda.bluchain.tech:13002/api/account/';
+	    // var endpoint = 'http://localhost:12002/api/account/';
+	    var endpoint = '/api/account/';
+
+	    if (type == 'tx') {
+			endpoint += 'tx-track?txid=' + txid;
+	    } else if (type == 'account') {
+			endpoint += 'account-track?id=' + accountid;
+		} else if (type == 'document') {
+			endpoint += 'document-track?document=' + acctDocument;
+	    }
+
+	    // faz a requisição
+	    $.get(endpoint, function(data, status){
+
+	    	// guarda os status dos states
+	    	responseStatus = data.status;
+
+	    	// carrega os valores dos arrays
+	    	getData(0, null, data.transactions);
+	    
+	    	// carrega os dados no diagrama
+			diagram.model = new go.GraphLinksModel(
+				elements,
+				links
+			);
+
+	    });
+	}
+
+	// funcao que carrega os dados
+	// level é usado para calcular X, cada level a mais coloca as caixinhas mais para esquerda
+	// txids são os ids de cada caixinha criada, pois o próximo nível precisa se ligar nesses ids
+	// data são as informações dos states
+	function getData(level, txids, data){
+
+		// limpa a lista de ids das caixinhas
+    	var txidList = []
+
+    	// inicia Y com 200 se estiver pela prmeira vez nesse nivel
+    	if (posY.length <= level) {
+    		posY.push(200);
+    	}
+
+    	// define X
+    	posX = 1000 - (level * 250);
+
+    	// para cada output cria uma caixinha
+        data.outputs.forEach(function(item, index){
+
+        	// obtém o texto do elemento
+        	var boxInfo = getBoxInfo(item, data.txid);
+
+        	// cria um índice única para cada caixinha, concatenando o id da transacao com o linearId
+        	var indexElem = data.txid + '_' + item.linearId.id;
+
+        	// procura se esse state já está na lista
+        	var elemFound = elements.find(function(check){
+        		return check.key == indexElem;
+        	})
+
+        	// se não encontrar irá adicionar
+        	if (!elemFound) {
+
+        		// adiciona o índice dele na lista
+	        	txidList.push(indexElem);
+
+	        	// define a cor do elemento
+	        	var color = this.getColor(boxInfo.type, boxInfo.status);
+
+	        	// cria o elemento
+	        	var elem = {
+	        		key : indexElem,
+	        		title: boxInfo.title, 
+	        		loc: posX + ' ' + posY[level],
+	        		text : '',
+	        		textConsumed : '',
+	        		color: color
+	        	};
+
+	        	if (boxInfo.status == 'CONSUMED') {
+	        		elem.textConsumed = boxInfo.text;
+	        	} else {
+	        		elem.text = boxInfo.text;
+	        	}
+
+	        	// soma o valor de Y
+	        	posY[level] += 150;
+
+	        	// inclui o item na lista de elementos
+	        	elements.push( elem );
+
+	        	// atribui para o elemento encontrado o item criado
+	        	elemFound = elem;
+
+	        }
+
+	        // liga apenas os inputs que foram consumidos pela transação que chamou essa função
+		    if (data.index == -1 || data.index == index) {
+
+		    	// só realiza se recebeu uma lista de ids de outputs, dessa forma os elementos aqui criados são seus inputs
+	        	if (txids) {
+
+	        		// liga o elemento criado/encontrado com seus outputs
+	        		txids.forEach(function(item, index){
+
+	        			// adiciona em links a ligação do elemento criado/encontrado com os ids recebido por parâmetro (item)
+	        			// ligando assim esse elemento criado/encontrado com seu output (quem chamou essa funcao recursivamente)
+						links.push({
+							from: elemFound.key,
+							to: item
+						});
+					});
+				}
+
+			}
+
+        });
+
+        // diminiu o valor de X
+        posX -= 200;
+
+        // para cada input chama recursivamente essa mesma rotina
+        data.inputs.forEach(function(item, index){
+
+        	// aumentando um level
+        	// passando a lista de ids dos states para ligar o input com seu output
+        	// passando a transação - item
+        	getData(level + 1, txidList, item);
+
+        });
+
+	}
+
+	function getColor(type, status) {
+
+		var color1 = "orange";
+		var color2 = "orange";
+		
+		if (type == 'account') {
+			color1 = '#E1FAE1';
+			color2 = '#E1FAE1';
+		} else if (type == 'transfer') {
+			color1 = '#DBE5F3';
+			color2 = '#DBE5F3';
+		} else if (type == 'paymentslip') {
+			color1 = '#ffffcc';
+			color2 = '#ffffcc';
+		} else if (type == 'directpayment') {
+			color1 = '#FFE0E0';
+			color2 = '#FFE0E0';
+			//color = $go(go.Brush, "Linear", { 0: "#006600", 1: "#F1F1F1" });
+		}
+		
+    	if (status == 'UNCONSUMED') {
+    		
+    		if (type == 'account') {
+				color1 = '#4CAF4C';
+			} else if (type == 'transfer') {
+				color1 = '#6E99D6';
+			} else if (type == 'paymentslip') {
+				color1 = '#B6B121';
+			} else if (type == 'directpayment') {
+				color1 = '#C47474';
+			}
+
+    	}
+
+	    return $go(go.Brush, "Linear", { 0: color1, 1: color2 });;
+	}
+
+	function getStatus(txid, stateName) {
+
+		var stateStatus = '';
+
+		responseStatus.forEach(function(item, index){
+			if (item.ref.txhash == txid && item.contractStateClassName.indexOf(stateName) > 0) {
+				stateStatus = item.status;
+			}
+		});
+
+		return stateStatus;
+	}
+
+	function getOrgName(org){
+
+		var orgName = org.substring( 2, org.indexOf(',') );
+
+		return orgName;
+
+	}
+
+	function getBoxInfo(item, txid) {
+
+		var txt = '';
+    	var status = '';
+    	var type = '';
+    	var title = '';
+
+    	if (item.account) {
+    		title = 'Conta';
+    		txt = "Org: " + item.account.orgName + "\n Nome: " + item.account.name + "\n Saldo: " + item.account.balance;
+    		status = getStatus(txid, 'AccountState');
+    		type = 'account';
+    	} else if (item.paymentSlip) {
+    		title = 'Boleto';
+    		txt = "Code: " + item.paymentSlip.code + "\n Valor: " + item.paymentSlip.amount;
+    		status = getStatus(txid, 'PaymentSlipState');
+    		type = 'paymentslip';
+    	} else if (item.transfer) {
+    		title = 'Transferencia';
+    		txt = "De: " + item.transfer.accountFromName + " ("+ getOrgName(item.transfer.orgFrom) +
+    		") \n Para: " + item.transfer.accountToName + " ("+ getOrgName(item.transfer.orgTo) +
+    		")\n Valor: " + item.transfer.amount;
+    		status = getStatus(txid, 'TransferState');
+    		type = 'transfer';
+    	} else if (item.directPayment) {
+    		title = 'Cobrança';
+    		txt = "De: " + item.directPayment.payerName + " ("+ getOrgName(item.directPayment.payerOrg) +
+    		") \n Para: " + item.directPayment.receiverName + " ("+ getOrgName(item.directPayment.receiverOrg) +
+    		")\n Valor: " + item.directPayment.amount + 
+    		"\n Cob Stat: " + item.directPayment.status;
+    		status = getStatus(txid, 'DirectPayment');
+    		type = 'directpayment';
+    	}
+
+    	var box = {
+    		type : type,
+    		title : title,
+    		text : txt + "\n Status: " + status,
+    		status : status
+    	}
+    	
+    	return box;
+
+	}
+
+	var divIndex = 0;
+	var oldDivIndex = 0;
+	function createGraph(){
+
+		$('#myDiagramDiv' + oldDivIndex).remove();
+		$('#area').append('<div id="myDiagramDiv'+ divIndex +'" style="border: solid 1px blue; width:1200px; height:1200px"></div>');
+
+		$('#myDiagramDiv' + divIndex).css("height", window.innerHeight - 70 );
+		$('#myDiagramDiv' + divIndex).css("width", window.innerWidth );
+
+		if (diagram) {
+			diagram.model = new go.GraphLinksModel([],[]);
+			diagram.clear();
+			diagram.div = null
+			diagram = null;
+		}
+
+		oldDivIndex = divIndex;
+
+		// cria o diagrama
+        diagram = new go.Diagram("myDiagramDiv" + divIndex++);
+        
+        // configura o template
+  		diagram.nodeTemplate =
+    		$go(go.Node, "Auto",
+    			new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+      			$go(go.Shape, "RoundedRectangle",new go.Binding("fill", "color")),
+      			$go(go.Panel, "Table",
+            		{ margin: 6, maxSize: new go.Size(200, NaN) },
+      				$go(go.TextBlock, { row: 0, column: 0, margin: 3, alignment: go.Spot.Top, font: "bold 14px Arial" }, new go.Binding("text", "title")),
+      				$go(go.TextBlock, { row: 1, column: 0, margin: 3 }, new go.Binding("text", "text")),
+      				$go(go.TextBlock, { row: 1, column: 0, margin: 3 , stroke: "#999999" }, new go.Binding("text", "textConsumed"))
+      			)
+    		);		
+
+	}
+
+  </script>
+
+</body>
+</html>
+
