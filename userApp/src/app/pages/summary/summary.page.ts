@@ -9,6 +9,7 @@ import * as moment from 'moment';
 })
 export class SummaryPage implements OnInit {
   averageAge: number;
+  averageIncome: number;
 
   constructor(
     private cordaSv: CordaService
@@ -22,15 +23,20 @@ export class SummaryPage implements OnInit {
     this.cordaSv.getAll()
     .then((states: Array<any>) => {
       let counter = 0;
-      let sum = 0;
+      let sumAge = 0;
+      let sumIncome = 0;
       states.forEach(el => {
         const perData = JSON.parse(el.state.data.identity.personalData);
+        const finData = JSON.parse(el.state.data.identity.financialData);
         counter += 1;
         const age = moment(perData.birthDate.split('/').reverse()).fromNow(true).match(/\d+/g).map(Number)[0];
-        sum += age;
-        console.log(sum);
+        const income = finData.anualIncome;
+        sumIncome += income
+        sumAge += age;
+        console.log(sumAge);
       });
-      this.averageAge = sum / counter;
+      this.averageAge = sumAge / counter;
+      this.averageIncome = sumIncome / counter;
     });
   }
 
