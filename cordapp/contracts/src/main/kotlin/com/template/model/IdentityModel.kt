@@ -17,5 +17,7 @@ data class IdentityModel(
     val financialDataAuth: String,
     val personalData: String,
     val contactData: String,
-    val financialData: String
+    val financialData: String,
+    val message: String,
+    val signature: String
 )

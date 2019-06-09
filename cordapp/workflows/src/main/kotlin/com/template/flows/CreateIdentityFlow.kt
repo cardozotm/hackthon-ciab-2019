@@ -65,7 +65,10 @@ object createIdentity {
                     financialData =  financialData,
                     personalDataAuth = "false",
                     financialDataAuth = "false",
-                    contactDataAuth = "false"
+                    contactDataAuth = "false",
+                    message = "",
+                    signature = ""
+
             )
 
             // cria o state
