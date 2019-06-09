@@ -32,6 +32,12 @@ export class CordaService {
     });
   }
 
+  getUser() {
+    return new Promise((resolve, reject) => {
+      resolve(JSON.parse(localStorage.getItem('userInfo')));
+    });
+  }
+
   approveDataRequest(auth) {
     return new Promise(async (resolve, reject) => {
       const message = this.cryptoSv.generateNonce();
@@ -57,7 +63,6 @@ export class CordaService {
           reject(err);
         }
       );
-      resolve();
     });
   }
 
@@ -78,14 +83,20 @@ export class CordaService {
     return new Promise(async (resolve, reject) => {
       const message = this.cryptoSv.generateNonce();
       const signature = await this.cryptoSv.signWithPrivk(localStorage.getItem('privKey'), message);
+      const identity = JSON.parse(localStorage.getItem('userInfo')).identity;
       const data = {
         message,
         signature,
+        uid: identity.uid,
+        personalDataAuth: identity.personalDataAuth,
+        financialDataAuth: identity.financialDataAuth,
+        contactDataAuth: identity.contactDataAuth,
       };
-      data[auth.key] = false;
+      data[auth.key + 'Auth'] = false;
+      console.log(data);
       this.http.post(`${environment.cordaApi}/autorize`, data).subscribe(
         (res) => {
-          console.log(res, 'marked for deletion');
+          console.log(res, 'removed');
           resolve(res);
         },
         (err) => {

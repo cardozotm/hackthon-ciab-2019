@@ -1,15 +1,21 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Relatórios de dados</ion-title>
+    <ion-button class="pr" slot="end" (click)="getAllStates()">
+        <ion-icon name="refresh"></ion-icon>
+      </ion-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
   <ion-list>
     <ion-item>
-      <ion-text>Total de usuários considerados</ion-text>
-      <ion-text slot="end">{{totalUsers | number:'0.0-0'}}</ion-text>
+      <ion-text>Total de usuários dados pessoais</ion-text>
+      <ion-text slot="end">{{totalUsersPer | number:'0.0-0'}}</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-text>Total de usuários dados financeiros</ion-text>
+      <ion-text slot="end">{{totalUsersFin | number:'0.0-0'}}</ion-text>
     </ion-item>
     <ion-item>
       <ion-text>Idade média dos usuários</ion-text>

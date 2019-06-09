@@ -10,7 +10,8 @@ import * as moment from 'moment';
 export class SummaryPage implements OnInit {
   averageAge: number;
   averageIncome: number;
-  totalUsers = 0;
+  totalUsersFin = 0;
+  totalUsersPer = 0;
 
   constructor(
     private cordaSv: CordaService
@@ -21,23 +22,38 @@ export class SummaryPage implements OnInit {
   }
 
   getAllStates() {
+    this.totalUsersFin = 0;
+    this.totalUsersPer = 0;
+    this.averageAge = 0;
+    this.averageIncome = 0;
     this.cordaSv.getAll()
     .then((states: Array<any>) => {
-      console.log(states);
+      // console.log(states);
       let sumAge = 0;
       let sumIncome = 0;
       states.forEach(el => {
-        const perData = JSON.parse(el.state.data.identity.personalData);
-        const finData = JSON.parse(el.state.data.identity.financialData);
-        this.totalUsers += 1;
-        const age = moment(perData.birthDate.split('/').reverse()).fromNow(true).match(/\d+/g).map(Number)[0];
-        const income = finData.anualIncome;
-        sumIncome += income;
-        sumAge += age;
-        console.log(sumAge);
+        const identity = el.state.data.identity;
+        console.log(identity);
+        const perData = JSON.parse(identity.personalData);
+        const finData = JSON.parse(identity.financialData);
+        if (identity.personalDataAuth === 'true') {
+          const age = moment(perData.birthDate.split('/').reverse()).fromNow(true).match(/\d+/g).map(Number)[0];
+          sumAge += age;
+          this.totalUsersPer += 1;
+        }
+        if (identity.financialDataAuth === 'true') {
+          this.totalUsersFin += 1;
+          const income = finData.anualIncome;
+          sumIncome += income;
+        }
+
       });
-      this.averageAge = sumAge / this.totalUsers;
-      this.averageIncome = sumIncome / this.totalUsers;
+      if (this.totalUsersFin > 0) {
+        this.averageIncome = sumIncome / this.totalUsersFin;
+      }
+      if (this.totalUsersPer > 0) {
+        this.averageAge = sumAge / this.totalUsersPer;
+      }
     });
   }
 
