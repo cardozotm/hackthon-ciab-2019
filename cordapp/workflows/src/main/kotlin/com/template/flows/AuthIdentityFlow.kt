@@ -31,11 +31,12 @@ object authIdentity {
     @StartableByRPC
     @CordaSerializable
     class authIndentityFlow(
-            private val personalDataAuth: String,
-            private val contactDataAuth: String,
-            private val financialDataAuth: String,
-            private val message: String,
-            private val signature: String
+            val uid : String,
+            val personalDataAuth: String,
+            val contactDataAuth: String,
+            val financialDataAuth: String,
+            val message: String,
+            val signature: String
     ) : BaseFlow() {
 
         companion object {
