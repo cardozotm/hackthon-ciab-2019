@@ -39,22 +39,22 @@ class Controller(rpc: NodeRPCConnection) {
         return "Define an endpoint here."
     }
 
-//    @CrossOrigin
-//    @GetMapping(value = "/all", produces = arrayOf(MediaType.APPLICATION_JSON))
-//    private fun debits(): Response {
-//        val criteria = QueryCriteria.VaultQueryCriteria(Vault.StateStatus.ALL)
-//        val result = proxy.vaultQueryBy<IdentityState>(criteria = criteria).states
-//        return Response.status(Response.Status.CREATED).entity(result).build()
-//    }
-
-
     @CrossOrigin
-    @GetMapping(value = "/only", produces = arrayOf(MediaType.APPLICATION_JSON))
+    @GetMapping(value = "/all", produces = arrayOf(MediaType.APPLICATION_JSON))
     private fun debits(): Response {
         val criteria = QueryCriteria.VaultQueryCriteria(Vault.StateStatus.ALL)
         val result = proxy.vaultQueryBy<IdentityState>(criteria = criteria).states
         return Response.status(Response.Status.CREATED).entity(result).build()
     }
+
+
+//    @CrossOrigin
+//    @GetMapping(value = "/only", produces = arrayOf(MediaType.APPLICATION_JSON))
+//    private fun debits(): Response {
+//        val criteria = QueryCriteria.VaultQueryCriteria(Vault.StateStatus.ALL)
+//        val result = proxy.vaultQueryBy<IdentityState>(criteria = criteria).states
+//        return Response.status(Response.Status.CREATED).entity(result).build()
+//    }
 
     @CrossOrigin
     @PostMapping(value = ["/create-account"], produces = arrayOf(MediaType.APPLICATION_JSON), consumes = arrayOf(MediaType.APPLICATION_JSON))
