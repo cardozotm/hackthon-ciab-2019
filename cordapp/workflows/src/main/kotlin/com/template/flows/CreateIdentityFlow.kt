@@ -91,13 +91,13 @@ object createIdentity {
             progressTracker.currentStep = FINALISING
 
             // finalizando
-            return subFlow(
-                FinalityFlow(signedTx,
-                    FINALISING.childProgressTracker()
-                )
-            )
+//            return subFlow(
+//                FinalityFlow(signedTx,
+//                    FINALISING.childProgressTracker()
+//                )
+//            )
 
-//            return subFlow(FinalityFlow(signedTx, emptyList()))
+            return subFlow(FinalityFlow(signedTx, emptyList()))
 
 
         }

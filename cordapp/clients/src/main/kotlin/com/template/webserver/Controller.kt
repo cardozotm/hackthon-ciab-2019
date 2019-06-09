@@ -56,4 +56,29 @@ class Controller(rpc: NodeRPCConnection) {
             Response.status(Response.Status.BAD_REQUEST).entity(ex.message).build()
         }
     }
+
+    @CrossOrigin
+    @PostMapping(value = ["/update-account"], produces = arrayOf(MediaType.APPLICATION_JSON), consumes = arrayOf(MediaType.APPLICATION_JSON))
+    fun updateAccount(@RequestBody data: IdentityRequestModel): Response {
+
+        val indexUid = IdentitySchemaV1.PersistentIdentity::uid.equal(data.uid)
+        val criteria = QueryCriteria.VaultCustomQueryCriteria(expression = indexUid)
+        val identity = proxy.vaultQueryBy<IdentityState>(criteria).states
+
+        if (identity.isNotEmpty()){
+            return Response.status(Response.Status.BAD_REQUEST).entity("UID já existe nesta Org.\n").build()
+        }
+
+        return try {
+
+            val signedTx = proxy.startTrackedFlow(createIdentity::CreateIdentityFlow, data.uid, data.pubkey, data.personalData, data.contactData, data.financialData).returnValue.getOrThrow()
+
+            Response.status(Response.Status.CREATED).entity( signedTx.tx.outputs.single() ).build()
+
+        } catch (ex: Throwable) {
+            logger.error(ex.message, ex)
+            logger.error(ex.toString())
+            Response.status(Response.Status.BAD_REQUEST).entity(ex.message).build()
+        }
+    }
 }
