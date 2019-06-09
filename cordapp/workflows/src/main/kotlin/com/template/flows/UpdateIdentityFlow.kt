@@ -111,7 +111,7 @@ object updateIdentity {
             progressTracker.currentStep = BUILDING
 
 
-            val notary = serviceHub.networkMapCache.notaryIdentities.single()
+//            val notary = serviceHub.networkMapCache.notaryIdentities.single()
 
 
             // criando a transação e validando
