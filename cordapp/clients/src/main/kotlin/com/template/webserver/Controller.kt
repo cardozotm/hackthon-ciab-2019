@@ -23,6 +23,7 @@ import javax.ws.rs.core.Response
 /**
  * Define your API endpoints here.
  */
+
 @RestController
 @RequestMapping("/") // The paths for HTTP requests are relative to this base path.
 class Controller(rpc: NodeRPCConnection) {
@@ -38,8 +39,17 @@ class Controller(rpc: NodeRPCConnection) {
         return "Define an endpoint here."
     }
 
+//    @CrossOrigin
+//    @GetMapping(value = "/all", produces = arrayOf(MediaType.APPLICATION_JSON))
+//    private fun debits(): Response {
+//        val criteria = QueryCriteria.VaultQueryCriteria(Vault.StateStatus.ALL)
+//        val result = proxy.vaultQueryBy<IdentityState>(criteria = criteria).states
+//        return Response.status(Response.Status.CREATED).entity(result).build()
+//    }
+
+
     @CrossOrigin
-    @GetMapping(value = "/all", produces = arrayOf(MediaType.APPLICATION_JSON))
+    @GetMapping(value = "/only", produces = arrayOf(MediaType.APPLICATION_JSON))
     private fun debits(): Response {
         val criteria = QueryCriteria.VaultQueryCriteria(Vault.StateStatus.ALL)
         val result = proxy.vaultQueryBy<IdentityState>(criteria = criteria).states
@@ -96,6 +106,7 @@ class Controller(rpc: NodeRPCConnection) {
         }
     }
 
+
     @CrossOrigin
     @PostMapping(value = ["/autorize"], produces = arrayOf(MediaType.APPLICATION_JSON), consumes = arrayOf(MediaType.APPLICATION_JSON))
     fun autorize(@RequestBody data: AuthRequestModel): Response {
@@ -105,19 +116,21 @@ class Controller(rpc: NodeRPCConnection) {
         val identity = proxy.vaultQueryBy<IdentityState>(criteria).states
 
         if (identity.isNotEmpty()){
-            return Response.status(Response.Status.BAD_REQUEST).entity("UID já existe nesta Org.\n").build()
+            return try {
+
+                val signedTx = proxy.startTrackedFlow(authIdentity::authIndentityFlow, data.personalDataAuth, data.contactDataAuth, data.financialDataAuth, data.message, data.signature).returnValue.getOrThrow()
+
+                Response.status(Response.Status.CREATED).entity( signedTx.tx.outputs.single() ).build()
+
+            } catch (ex: Throwable) {
+                logger.error(ex.message, ex)
+                logger.error(ex.toString())
+                Response.status(Response.Status.BAD_REQUEST).entity(ex.message).build()
+            }
+        } else {
+            return Response.status(Response.Status.BAD_REQUEST).entity("UID não existe nesta Org.\n").build()
         }
 
-        return try {
 
-            val signedTx = proxy.startTrackedFlow(authIdentity::authIndentityFlow, data.personalDataAuth, data.contactDataAuth, data.financialDataAuth, data.message, data.signature).returnValue.getOrThrow()
-
-            Response.status(Response.Status.CREATED).entity( signedTx.tx.outputs.single() ).build()
-
-        } catch (ex: Throwable) {
-            logger.error(ex.message, ex)
-            logger.error(ex.toString())
-            Response.status(Response.Status.BAD_REQUEST).entity(ex.message).build()
-        }
     }
 }
