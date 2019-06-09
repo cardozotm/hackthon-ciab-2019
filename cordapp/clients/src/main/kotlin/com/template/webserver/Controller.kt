@@ -38,6 +38,7 @@ class Controller(rpc: NodeRPCConnection) {
         return "Define an endpoint here."
     }
 
+    @CrossOrigin
     @GetMapping(value = "/all", produces = arrayOf(MediaType.APPLICATION_JSON))
     private fun debits(): Response {
         val criteria = QueryCriteria.VaultQueryCriteria(Vault.StateStatus.ALL)
