@@ -48,12 +48,12 @@ class IdentityContract : Contract {
         requireThat {
 
             val out = tx.outputsOfType<IdentityState>().single()
-            val imp = tx.inputsOfType<AuthState>().single()
+            // val imp = tx.inputsOfType<AuthState>().single()
 
             val pubKey = getKey(out.identity.pubkey.toByteArray())
-            val signature = Hex.decode(imp.auth.signature)
+            val signature = Hex.decode(out.identity.signature)
 
-            val b = Crypto.doVerify(Crypto.RSA_SHA256, pubKey, signature , imp.auth.message.toByteArray())
+            val b = Crypto.doVerify(Crypto.RSA_SHA256, pubKey, signature , out.identity.message.toByteArray())
 
             "Apenas uma conta deve ser criada" using (tx.outputs.size == 1)
 

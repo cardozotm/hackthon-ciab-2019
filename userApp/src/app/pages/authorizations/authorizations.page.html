@@ -7,8 +7,8 @@
 
 <ion-content padding>
   <div text-center>
-    <h2>keyDATA</h2>
-    <h4>Soluções em Privacidade</h4>
+    <h2 class="highlight">KeyDATA</h2>
+    <h4>Gestão de Identidade</h4>
   </div>
 
   <ion-card padding>
@@ -18,14 +18,13 @@
     <ion-list>
       <ion-item-group *ngFor="let bank of bankList">
         <ion-item-divider>
-          <ion-label>{{bank.name}}</ion-label>
+          <ion-label class="black">{{bank.name}}</ion-label>
         </ion-item-divider>
         <div *ngFor="let data of dataList">
           <ion-item *ngIf="identity[data.key+'Auth']=='false'">
             <ion-label>{{data.name}}</ion-label>
-            <ion-button slot="end" color="primary" (click)="showDetailsApproval(data, bank)">
-              Detalhes
-            </ion-button>
+            <ion-icon name="information-circle-outline" slot="end" class="contrast" color="primary"
+              (click)="showDetailsApproval(data, bank)"></ion-icon>
           </ion-item>
         </div>
       </ion-item-group>
@@ -39,16 +38,15 @@
     <ion-list>
       <ion-item-group *ngFor="let bank of bankList">
         <ion-item-divider>
-          <ion-label>{{bank.name}}</ion-label>
+          <ion-label class="black">{{bank.name}}</ion-label>
         </ion-item-divider>
         <div *ngFor="let data of dataList">
-            <ion-item *ngIf="identity[data.key+'Auth']=='true'">
-              <ion-label>{{data.name}}</ion-label>
-              <ion-button slot="end" color="primary" (click)="showDetailsApproved(data, bank)">
-                Detalhes
-              </ion-button>
-            </ion-item>
-          </div>
+          <ion-item *ngIf="identity[data.key+'Auth']=='true'">
+            <ion-label>{{data.name}}</ion-label>
+            <ion-icon name="information-circle-outline" slot="end" class="contrast" color="primary"
+              (click)="showDetailsApproved(data, bank)"></ion-icon>
+          </ion-item>
+        </div>
       </ion-item-group>
     </ion-list>
   </ion-card>

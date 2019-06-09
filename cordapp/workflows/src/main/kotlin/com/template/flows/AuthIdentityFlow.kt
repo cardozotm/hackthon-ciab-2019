@@ -101,8 +101,8 @@ object authIdentity {
             val accountState = IdentityState(account)
 
             // criando o novo state auth
-            val auth = AuthModel(entity = ourIdentity, message = message, signature = signature)
-            val authState = AuthState(auth)
+            // val auth = AuthModel(entity = ourIdentity, message = message, signature = signature)
+            // val authState = AuthState(auth)
 
 
             // criando o command para validação do contract
@@ -121,7 +121,7 @@ object authIdentity {
             val txBuilder = TransactionBuilder(notary)
                     .addCommand(txCommandDoPayments)
                     .addInputState(oldIdentityStateAndRef)
-                    .addOutputState(authState)
+                    // .addOutputState(authState)
                     .addOutputState(accountState, IdentityContract::class.java.canonicalName)
 
             txBuilder.verify(serviceHub)

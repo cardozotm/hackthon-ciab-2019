@@ -32,10 +32,10 @@ ion-alert .danger {
 
 :root {
   ion-toolbar{
-  --ion-background-color: var(--background-gold);
+  --ion-background-color: #FF8700;
   color: white;
   }
-  --ion-background-color: var(--background-gold-tint);
+  --ion-background-color: #F8F9FA;
 }
 ion-card {
   background: white!important;
@@ -47,9 +47,30 @@ ion-item-divider {
 }
 
 .alert {
-  color: var(--ion-color-warning-shade)
+  color: #FFC107
+}
+
+.highlight {
+  color: #E26F1E;
+  font-weight: bold;
 }
 
 .affirmative {
-  color: var(--green-shade)
+  color: #8DC63F
+}
+
+ion-alert .affirmative {
+  color: #8DC63F
+}
+
+.contrast {
+  --ion-color-primary: #6C757D;
+}
+
+* {
+  font-family: 'Montserrat', sans-serif!important;
+}
+
+.black {
+  color: #262626!important
 }
