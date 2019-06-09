@@ -12,9 +12,9 @@ data class IdentityModel(
     val createTime : Instant,
     val uid : String,
     val pubkey : String,
-    val personalDataAuth: Boolean,
-    val contactDataAuth: Boolean,
-    val financialDataAuth: Boolean,
+    val personalDataAuth: String,
+    val contactDataAuth: String,
+    val financialDataAuth: String,
     val personalData: String,
     val contactData: String,
     val financialData: String

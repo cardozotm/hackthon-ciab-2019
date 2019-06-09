@@ -31,9 +31,9 @@ object authIdentity {
     @StartableByRPC
     @CordaSerializable
     class authIndentityFlow(
-            private val personalDataAuth: Boolean,
-            private val contactDataAuth: Boolean,
-            private val financialDataAuth: Boolean,
+            private val personalDataAuth: String,
+            private val contactDataAuth: String,
+            private val financialDataAuth: String,
             private val message: String,
             private val signature: String
     ) : BaseFlow() {
