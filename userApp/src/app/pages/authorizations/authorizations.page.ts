@@ -87,8 +87,8 @@ export class AuthorizationsPage implements OnInit {
     const alert = await this.alertCtrl.create({
       header: 'Detalhes da autorização',
       message: `
-      <p><b>${bank.name}</b> possui acesso a suas informações de:</p>
-      <ul><li>${auth.name}</li></ul>
+      <p><b>${bank.name}</b> deseja acessar suas informações de:</p>
+      <ul><li>${auth.name} ${this.dataList.find(x => x.name === auth.name).details}</li><ul>
       `,
       buttons: [
         'Voltar',
